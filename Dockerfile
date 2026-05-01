@@ -111,7 +111,8 @@ RUN bash -c "source $NVM_DIR/nvm.sh && \
         prettier \
         nodemon \
         yarn \
-        pnpm"
+        pnpm \
+        @playwright/cli@latest"
 
 # Install SDKMAN for Java toolchain management
 RUN curl -s "https://get.sdkman.io?rcupdate=false" | bash && \
@@ -145,6 +146,9 @@ RUN /home/${USERNAME}/.local/bin/uv tool install black && \
     /home/${USERNAME}/.local/bin/uv tool install ipython && \
     /home/${USERNAME}/.local/bin/uv tool install poetry && \
     /home/${USERNAME}/.local/bin/uv tool install pipenv
+
+# Setup Playwright skills
+RUN bash -c "source $NVM_DIR/nvm.sh && playwright-cli install --skills agents"
 
 # Install oh-my-zsh for better shell experience and setup NVM for zsh
 RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended && \
