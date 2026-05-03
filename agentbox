@@ -18,6 +18,7 @@ fi
 readonly SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
 readonly SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
 readonly PROJECT_DIR="$(pwd)"
+readonly PROJECT_REALPATH="$(pwd -P)"
 readonly PROJECT_NAME="$(basename "$PROJECT_DIR")"
 readonly DOCKERFILE_PATH="${SCRIPT_DIR}/Dockerfile"
 readonly ENTRYPOINT_PATH="${SCRIPT_DIR}/entrypoint.sh"
@@ -75,7 +76,8 @@ calculate_hash() {
 
 # Get container name for current project
 get_container_name() {
-    local project_hash=$(echo -n "$PROJECT_DIR" | sha256sum | cut -c1-12)
+    local project_hash
+    project_hash=$(printf '%s' "$PROJECT_REALPATH" | sha256sum | cut -c1-12)
     echo "${CONTAINER_PREFIX}-${project_hash}"
 }
 
@@ -631,7 +633,8 @@ main() {
     log_info "Using container runtime: $RUNTIME"
 
     # Get container name for current project
-    local container_name=$(get_container_name)
+    local container_name
+    container_name=$(get_container_name)
 
     # Validate dir paths (batch all errors so user sees all problems at once)
     local project_realpath
