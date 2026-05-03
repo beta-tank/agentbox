@@ -15,7 +15,7 @@ AgentBox is a simplified replacement for ClaudeBox. The user was maintaining pat
 
 1. **Ephemeral Containers**: Containers use `--rm` flag and are destroyed on exit. This differs from ClaudeBox's persistent slot-based containers.
 
-2. **Hash-Based Naming**: Container names use SHA256 hash of project directory path (first 12 chars) to ensure uniqueness and avoid conflicts.
+2. **Hash-Based Naming**: Container names use SHA256 hash of the canonical project directory path (first 12 chars) to ensure uniqueness and avoid conflicts.
 
 3. **Bind Over Volume**: Claude CLI and OpenCode use bind mounts to host directories.
 
@@ -146,7 +146,7 @@ The `agentbox` script has these key functions:
 
 1. **Never use `-i` flag**: Git commands like `git rebase -i` won't work in non-interactive container context
 
-2. **Path Hashing**: Container names use first 12 chars of SHA256(project_path) - collision risk is negligible
+2. **Path Hashing**: Container names use first 12 chars of SHA256(real_project_path) - collision risk is negligible
 
 3. **Container Naming**: `agentbox-<hash>` pattern ensures per-project container isolation (separate caches and history, but shared tool authentication)
 
